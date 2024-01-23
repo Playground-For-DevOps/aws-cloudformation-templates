@@ -1,0 +1,90 @@
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+      - Key: stack
+        Value: production
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      CidrBlock: 10.0.0.0/18
+      AvailabilityZone: "ap-northeast-2a"
+      Tags:
+      - Key: stack
+        Value: production
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      CidrBlock: 10.0.64.0/18
+      AvailabilityZone: "ap-northeast-2a"
+      Tags:
+      - Key: stack
+        Value: production
+  Subnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      CidrBlock: 10.0.128.0/18
+      AvailabilityZone: "ap-northeast-2b"
+      Tags:
+      - Key: stack
+        Value: production
+  Subnet4:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      CidrBlock: 10.0.192.0/18
+      AvailabilityZone: "ap-northeast-2b"
+      Tags:
+      - Key: stack
+        Value: production
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Enable HTTP access via port 80 locked down to the load balancer + SSH access"
+      SecurityGroupEgress: 
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: "-1"
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: 80
+        IpProtocol: tcp
+        ToPort: 80
+      - CidrIp: 0.0.0.0/0
+        FromPort: 22
+        IpProtocol: tcp
+        ToPort: 22
+      VpcId: !GetAtt VPC.VpcId
+  # allow local traffic
+  # SGBaseIngress:
+  #   Type: AWS::EC2::SecurityGroupIngress
+  #   Properties:
+  #     GroupId: !Ref WebServerSecurityGroup
+  #     IpProtocol: '-1'
+  #     FromPort: '-1'
+  #     ToPort: '-1'
+  #     SourceSecurityGroupId: !Ref WebServerSecurityGroup
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: 'ami-0bc4327f3aabf5b71'
+      InstanceType: 'm1.medium'
+      KeyName: 'ntnguyen'
+      SecurityGroupIds:
+          - !Ref WebServerSecurityGroup
+      SubnetId: !GetAtt Subnet1.SubnetId
+# output important values for easy viewing in cloudformation dashboard
+Outputs:
+  WebServerID:
+    Description: InstanceId of the first EC2 instance
+    Value: !Ref WebServer
