@@ -1,0 +1,20 @@
+Resources:
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      # ImageId: 'ami-0bc4327f3aabf5b71'
+      ImageId: 'ami-0bc4327f3aabf5b71'
+      InstanceType: 't2.micro'
+      KeyName: 'ntnguyen'
+      SecurityGroupIds:
+      # - !GetAtt WebServerSecurityGroup.GroupId
+      # - !GetAtt IngressSecurityGroup.GroupId
+      - 'sg-06d6768a17c6a7c25'
+      - 'sg-095deeaae507aa79e'
+      SubnetId: 'subnet-0634dffba747e46e3'
+      # SubnetId: !GetAtt Subnet1.SubnetId
+# output important values for easy viewing in cloudformation dashboard
+Outputs:
+  WebServerID:
+    Description: InstanceId of the first EC2 instance
+    Value: !Ref WebServer

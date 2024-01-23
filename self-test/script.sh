@@ -1,5 +1,4 @@
-aws cloudformation validate-template --template-body file:///home/ubuntu/aws/aws-cloudformation-
-templates/self-test/EKS.yaml
+aws cloudformation validate-template --template-body file:///home/ubuntu/aws/aws-cloudformation-templates/self-test/EKS.yaml
 
 
 
