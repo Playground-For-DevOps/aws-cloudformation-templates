@@ -16,4 +16,4 @@ aws cloudformation delete-stack --stack-name test
 
 ssh -i ssh/ntnguyen.pem ec2-user@private_ip -o "proxycommand ssh -W %h:%p -i ssh/ntnguyen.pem ec2-user@public_ip"
 
-ssh  -J ec2-user@3.38.97.104 ec2-user@10.16.32.202 -i ssh/ntnguyen.pem
+ssh  -J ec2-user@3.38.116.105 ec2-user@10.16.43.128 -i ssh/ntnguyen.pem

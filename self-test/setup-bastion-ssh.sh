@@ -21,6 +21,7 @@ ssh User@Private_instance_IP_address
 
 # Or only one command
 ssh -J user@bastion-host user@private-ip
+# ssh -J ec2-user@13.125.197.13 ec2-user@10.16.46.208
 
 # Clear all identities save in-memory of ssh-agent
 ssh-agent -k

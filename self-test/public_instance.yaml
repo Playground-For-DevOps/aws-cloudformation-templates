@@ -1,5 +1,5 @@
 
-Description:  Animals4Life base VPC Template + Public Instance
+Description:  Nephio VPC Template
 Parameters:
   LatestAmiId:
     Description: AMI for EC2 (default is latest AmaLinux2023)
@@ -18,18 +18,18 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: a4l-vpc1
-  IPv6CidrBlock:
-    Type: AWS::EC2::VPCCidrBlock
-    Properties:
-      VpcId: !Ref VPC
-      AmazonProvidedIpv6CidrBlock: true
+          Value: nephio-vpc
+  # IPv6CidrBlock:
+  #   Type: AWS::EC2::VPCCidrBlock
+  #   Properties:
+  #     VpcId: !Ref VPC
+      # AmazonProvidedIpv6CidrBlock: true
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
       Tags:
         - Key: Name
-          Value: A4L-vpc1-igw
+          Value: nephio-vpc-igw
   InternetGatewayAttachment:
     Type: 'AWS::EC2::VPCGatewayAttachment'
     Properties:
@@ -51,15 +51,15 @@ Resources:
       DestinationCidrBlock: '0.0.0.0/0'
       GatewayId:
         Ref: InternetGateway
-  RouteTableWebDefaultIPv6: 
-    Type: 'AWS::EC2::Route'
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      RouteTableId:
-        Ref: RouteTableWeb
-      DestinationIpv6CidrBlock: '::/0'
-      GatewayId: 
-        Ref: InternetGateway
+  # RouteTableWebDefaultIPv6: 
+  #   Type: 'AWS::EC2::Route'
+  #   DependsOn: InternetGatewayAttachment
+  #   Properties:
+  #     RouteTableId:
+  #       Ref: RouteTableWeb
+  #     DestinationIpv6CidrBlock: '::/0'
+  #     GatewayId: 
+  #       Ref: InternetGateway
   RouteTableAssociationWebA:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
@@ -80,193 +80,193 @@ Resources:
         Ref: RouteTableWeb
   SubnetReservedA:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: 10.16.0.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '00::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '00::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-reserved-A
   SubnetReservedB:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: 10.16.64.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '04::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '04::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-reserved-B
   SubnetReservedC:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 2, !GetAZs '' ]
       CidrBlock: 10.16.128.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '08::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '08::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-reserved-C
   SubnetDBA:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: 10.16.16.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '01::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '01::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-db-A
   SubnetDBB:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: 10.16.80.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '05::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '05::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-db-B
   SubnetDBC:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 2, !GetAZs '' ]
       CidrBlock: 10.16.144.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '09::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '09::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-db-C
   SubnetAPPA:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: 10.16.32.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '02::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '02::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-app-A
   SubnetAPPB:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: 10.16.96.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '06::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '06::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-app-B
   SubnetAPPC:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 2, !GetAZs '' ]
       CidrBlock: 10.16.160.0/20
-      AssignIpv6AddressOnCreation: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '0A::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # AssignIpv6AddressOnCreation: true
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '0A::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-app-C
   SubnetWEBA:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: 10.16.48.0/20
       MapPublicIpOnLaunch: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '03::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '03::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-web-A
   SubnetWEBB:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
       CidrBlock: 10.16.112.0/20
       MapPublicIpOnLaunch: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '07::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '07::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-web-B
   SubnetWEBC:
     Type: AWS::EC2::Subnet
-    DependsOn: IPv6CidrBlock
+    # DependsOn: IPv6CidrBlock
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 2, !GetAZs '' ]
       CidrBlock: 10.16.176.0/20
       MapPublicIpOnLaunch: true
-      Ipv6CidrBlock: 
-        Fn::Sub:
-          - "${VpcPart}${SubnetPart}"
-          - SubnetPart: '0B::/64'
-            VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
+      # Ipv6CidrBlock: 
+      #   Fn::Sub:
+      #     - "${VpcPart}${SubnetPart}"
+      #     - SubnetPart: '0B::/64'
+      #       VpcPart: !Select [ 0, !Split [ '00::/56', !Select [ 0, !GetAtt VPC.Ipv6CidrBlocks ]]]
       Tags:
         - Key: Name
           Value: sn-web-C
@@ -365,7 +365,7 @@ Resources:
       ImageId: !Ref LatestAmiId
       IamInstanceProfile: !Ref SessionManagerInstanceProfile
       SubnetId: !Ref SubnetAPPA
-      SecurityGroupIds: 
+      SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       Tags:
         - Key: Name
@@ -415,16 +415,16 @@ Resources:
       VpcId: !Ref VPC
       GroupDescription: Enable SSH access via port 22 IPv4 & v6
       SecurityGroupIngress:
-        - Description: 'Allow UDP IPv4 All port'
-          IpProtocol: udp
-          FromPort: '1'
-          ToPort: '65535'
-          CidrIp: '0.0.0.0/0'
-        - Description: 'Allow TCP IPv4 All port'
-          IpProtocol: tcp
-          FromPort: '1'
-          ToPort: '65535'
-          CidrIp: '0.0.0.0/0'
+        # - Description: 'Allow UDP IPv4 All port'
+        #   IpProtocol: udp
+        #   FromPort: '1'
+        #   ToPort: '65535'
+        #   CidrIp: '0.0.0.0/0'
+        # - Description: 'Allow TCP IPv4 All port'
+        #   IpProtocol: tcp
+        #   FromPort: '1'
+        #   ToPort: '65535'
+        #   CidrIp: '0.0.0.0/0'
         - Description: 'Allow SSH IPv4 IN'
           IpProtocol: tcp
           FromPort: '22'
@@ -509,6 +509,61 @@ Resources:
       Path: /
       Roles:
         - !Ref SessionManagerRole
+  NATGatewaySubnetAppA:
+    DependsOn: InternetGatewayAttachment
+    Type: AWS::EC2::NatGateway
+    Properties:
+        AllocationId: !GetAtt NATGatewayAppAEIP.AllocationId
+        SubnetId: !Ref SubnetWEBA
+        Tags:
+        - Key: Name
+          Value: NAT-Subnet-WebA
+  NATGatewayAppAEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+        Domain: vpc
+        Tags:
+        - Key: Name
+          Value: NAT-Subnet-WebA-EIP
+  # RouteNATGatewayAppA:
+  #   Type: AWS::EC2::Route
+  #   Properties:
+  #       RouteTableId: !Ref RouteTablePrivateSubnetAppA
+  #       DestinationCidrBlock: '0.0.0.0/0'
+  #       NatGatewayId: !Ref NATGatewaySubnetAppA
+  RouteTablePrivateSubnetAppA: 
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: A4L-vpc1-rt-app-A
+  RoutePrivateSubnetAppADefaultIPv4: 
+    Type: 'AWS::EC2::Route'
+    DependsOn: NATGatewaySubnetAppA
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePrivateSubnetAppA
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId:
+        Ref: NATGatewaySubnetAppA
+# NAT gateway cannot be the next hop for an IPv6 destination CIDR block
+  # RoutePrivateSubnetAppADefaultIPv6: 
+  #   Type: 'AWS::EC2::Route'
+  #   DependsOn: InternetGatewayAttachment
+  #   Properties:
+  #     RouteTableId:
+  #       Ref: RouteTablePrivateSubnetAppA
+  #     DestinationIpv6CidrBlock: '::/0'
+  #     GatewayId: 
+  #       Ref: NATGatewaySubnetAppA
+  RouteTableAssociationAppA:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      SubnetId: !Ref SubnetAPPA
+      RouteTableId:
+        Ref: RouteTablePrivateSubnetAppA
 Outputs:
   BastionHostInfo:
     Description: BastionHostInfo
