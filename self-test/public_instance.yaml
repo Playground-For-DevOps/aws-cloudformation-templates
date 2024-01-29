@@ -4,7 +4,8 @@ Parameters:
   LatestAmiId:
     Description: AMI for EC2 (default is latest AmaLinux2023)
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+    Default: '/aws/service/canonical/ubuntu/server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id'
+    # Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: "Name of an existing SSH Keypair to access the instance"
@@ -540,7 +541,7 @@ Resources:
           Value: A4L-vpc1-rt-app-A
   RoutePrivateSubnetAppADefaultIPv4: 
     Type: 'AWS::EC2::Route'
-    DependsOn: NATGatewaySubnetAppA
+    # DependsOn: NATGatewaySubnetAppA
     Properties:
       RouteTableId:
         Ref: RouteTablePrivateSubnetAppA
