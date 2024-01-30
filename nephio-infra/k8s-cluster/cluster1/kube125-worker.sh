@@ -45,3 +45,9 @@ if (systemctl -q is-active containerd)
     sudo systemctl enable containerd   
 fi
 sudo systemctl enable kubelet
+sudo tee /etc/crictl.yaml <<EOF
+runtime-endpoint: unix:///var/run/containerd/containerd.sock
+image-endpoint: unix:///var/run/containerd/containerd.sock
+timeout: 10
+debug: true
+EOF

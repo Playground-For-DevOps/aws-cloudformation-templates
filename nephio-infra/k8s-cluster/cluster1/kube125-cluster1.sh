@@ -51,9 +51,17 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 export KUBECONFIG=/etc/kubernetes/admin.conf
-# kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+sudo tee /etc/crictl.yaml <<EOF
+runtime-endpoint: unix:///var/run/containerd/containerd.sock
+image-endpoint: unix:///var/run/containerd/containerd.sock
+timeout: 10
+debug: true
+EOF
+# Install CNI
+kubectl apply -f https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube-flannel1.yml
 kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
 kubectl taint node $(hostname) node-role.kubernetes.io/master:NoSchedule-
 wget https://get.helm.sh/helm-v3.7.2-linux-amd64.tar.gz
 tar -xvf helm-v3.7.2-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/
+sudo mv linux-amd64/helm /usr/local/bin/
+crictl ps -a
