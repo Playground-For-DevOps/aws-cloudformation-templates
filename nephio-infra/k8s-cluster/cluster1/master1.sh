@@ -1,7 +1,7 @@
 #! /bin/bash
 # Remove kubernetes repository package because gpg file of google is down
 # https://packages.cloud.google.com/apt/doc/apt-key.gpg 500 Error
- rm /etc/apt/sources.list.d/kubernetes.list
+# rm /etc/apt/sources.list.d/kubernetes.list
 ##Install Docker
 sudo apt-get update -y
 
