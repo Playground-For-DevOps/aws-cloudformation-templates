@@ -46,11 +46,12 @@ if (systemctl -q is-active containerd)
 fi
 sudo systemctl enable kubelet
 sudo kubeadm config images pull --cri-socket unix:///run/containerd/containerd.sock --kubernetes-version v1.25.0
-sudo kubeadm init   --pod-network-cidr=10.18.0.0/16   --upload-certs --kubernetes-version=v1.25.0  --control-plane-endpoint=$(hostname) --ignore-preflight-errors=all  --cri-socket unix:///run/containerd/containerd.sock
+sudo kubeadm init   --pod-network-cidr=10.19.0.0/16   --upload-certs --kubernetes-version=v1.25.0  --control-plane-endpoint=$(hostname) --ignore-preflight-errors=all  --cri-socket unix:///run/containerd/containerd.sock
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 export KUBECONFIG=/etc/kubernetes/admin.conf
+
 sudo tee /etc/crictl.yaml <<EOF
 runtime-endpoint: unix:///var/run/containerd/containerd.sock
 image-endpoint: unix:///var/run/containerd/containerd.sock
@@ -58,7 +59,7 @@ timeout: 10
 debug: true
 EOF
 # Install CNI
-kubectl apply -f https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube-flannel1.yml
+kubectl apply -f https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/edge/kube-flannel-edge.yml
 kubectl taint node $(hostname) node-role.kubernetes.io/control-plane:NoSchedule-
 kubectl taint node $(hostname) node-role.kubernetes.io/master:NoSchedule-
 wget https://get.helm.sh/helm-v3.7.2-linux-amd64.tar.gz
