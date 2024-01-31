@@ -204,9 +204,9 @@ Resources:
             #!/bin/bash
             echo $pwd
             cd /home/ubuntu
-            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube125-cluster1.sh
-            chmod +x kube125-cluster1.sh
-            sudo ./kube125-cluster1.sh | tee install_mgmt_log.txt
+            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/mgmt/kube125-mgmt.sh
+            chmod +x kube125-mgmt.sh
+            sudo ./kube125-mgmt.sh | tee install_mgmt_log.txt
 
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
@@ -228,9 +228,9 @@ Resources:
             #!/bin/bash
             echo $pwd
             cd /home/ubuntu
-            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube125-cluster1.sh
-            chmod +x kube125-cluster1.sh
-            sudo ./kube125-cluster1.sh | tee install_regional_log.txt
+            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/regional/kube125-regional.sh
+            chmod +x kube125-regional.sh
+            sudo ./kube125-regional.sh | tee install_regional_log.txt
 
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
@@ -274,9 +274,9 @@ Resources:
             #!/bin/bash
             echo $pwd
             cd /home/ubuntu
-            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster2/kube125-cluster2.sh
-            chmod +x kube125-cluster2.sh
-            sudo ./kube125-cluster2.sh | tee install_edge_log.txt
+            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/edge/kube125-edge.sh
+            chmod +x kube125-edge.sh
+            sudo ./kube125-edge.sh | tee install_edge_log.txt
 
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
