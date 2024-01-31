@@ -189,58 +189,122 @@ Resources:
       Tags:
         - Key: Name
           Value: BastionHost
-  Master1:
-    Type: AWS::EC2::Instance
+  Mmgt:
+    Type: AWS::EC2::Instance 
+    DependsOn: RoutePrivateSubnetIPv4
     Properties:
       InstanceType: "t2.xlarge"
       KeyName: !Ref KeyName
       ImageId: !Ref LatestAmiId
       IamInstanceProfile: !Ref SessionManagerInstanceProfile
       SubnetId: !Ref SubnetAPPA
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            echo $pwd
+            cd /home/ubuntu
+            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube125-cluster1.sh
+            chmod +x kube125-cluster1.sh
+            sudo ./kube125-cluster1.sh | tee install_mgmt_log.txt
+
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       Tags:
         - Key: Name
-          Value: Master1
-  Worker1:
-    Type: AWS::EC2::Instance
+          Value: ManagementCluster
+  Regional:
+    Type: AWS::EC2::Instance 
+    DependsOn: RoutePrivateSubnetIPv4
     Properties:
       InstanceType: "t2.xlarge"
       KeyName: !Ref KeyName
       ImageId: !Ref LatestAmiId
       IamInstanceProfile: !Ref SessionManagerInstanceProfile
       SubnetId: !Ref SubnetAPPA
-      SecurityGroupIds: 
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            echo $pwd
+            cd /home/ubuntu
+            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube125-cluster1.sh
+            chmod +x kube125-cluster1.sh
+            sudo ./kube125-cluster1.sh | tee install_regional_log.txt
+
+      SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       Tags:
         - Key: Name
-          Value: Worker1
-  # Master2:
+          Value: RegionalCluster
+  # Worker1:
   #   Type: AWS::EC2::Instance
+  #   DependsOn: RoutePrivateSubnetIPv4
   #   Properties:
   #     InstanceType: "t2.xlarge"
   #     KeyName: !Ref KeyName
   #     ImageId: !Ref LatestAmiId
   #     IamInstanceProfile: !Ref SessionManagerInstanceProfile
   #     SubnetId: !Ref SubnetAPPA
+  #     UserData:
+  #       Fn::Base64: 
+  #         !Sub |
+  #           #!/bin/bash
+  #           cd /home/ubuntu
+  #           wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube125-worker.sh
+  #           chmod +x kube125-worker.sh
+  #           sudo ./kube125-worker.sh | tee install_worker1_log.txt
   #     SecurityGroupIds: 
   #       - !Ref InstanceSecurityGroup
   #     Tags:
   #       - Key: Name
-  #         Value: Master2
+  #         Value: Worker1
+  Edge:
+    Type: AWS::EC2::Instance 
+    DependsOn: RoutePrivateSubnetIPv4
+    Properties:
+      InstanceType: "t2.xlarge"
+      KeyName: !Ref KeyName
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref SessionManagerInstanceProfile
+      SubnetId: !Ref SubnetAPPA
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            echo $pwd
+            cd /home/ubuntu
+            wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster2/kube125-cluster2.sh
+            chmod +x kube125-cluster2.sh
+            sudo ./kube125-cluster2.sh | tee install_edge_log.txt
+
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: EdgeCluster
   # Worker2:
   #   Type: AWS::EC2::Instance
+  #   DependsOn: RoutePrivateSubnetIPv4
   #   Properties:
   #     InstanceType: "t2.xlarge"
   #     KeyName: !Ref KeyName
   #     ImageId: !Ref LatestAmiId
   #     IamInstanceProfile: !Ref SessionManagerInstanceProfile
   #     SubnetId: !Ref SubnetAPPA
+  #     UserData:
+  #       Fn::Base64: 
+  #         !Sub |
+  #           #!/bin/bash
+  #           cd /home/ubuntu
+  #           wget https://raw.githubusercontent.com/Playground-For-DevOps/aws-cloudformation-templates/master/nephio-infra/k8s-cluster/cluster1/kube125-worker.sh
+  #           chmod +x kube125-worker.sh
+  #           sudo ./kube125-worker.sh | tee install_worker2_log.txt
   #     SecurityGroupIds: 
   #       - !Ref InstanceSecurityGroup
   #     Tags:
   #       - Key: Name
-  #         Value: Master2
+  #         Value: Worker2
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -342,7 +406,7 @@ Resources:
       Roles:
         - !Ref SessionManagerRole
   NATGatewayA:
-    DependsOn: Master1
+    # DependsOn: Master1
     Type: AWS::EC2::NatGateway
     Properties:
         AllocationId: !GetAtt NATGatewayAEIP.AllocationId
@@ -400,8 +464,8 @@ Outputs:
   BastionHostInfo:
     Description: BastionHostInfo
     Value: !Ref BastionHost
-  Master1Info:
-    Value: !Ref Master1
+  MmgtInfo:
+    Value: !Ref Mmgt
   # Master2Info:
   #   Value: !Ref Master2
   Worker1Info:
