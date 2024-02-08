@@ -1,0 +1,29 @@
+---
+# SPDX-license-identifier: Apache-2.0
+##############################################################################
+# Copyright (c) 2023 The Nephio Authors.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, Version 2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+##############################################################################
+
+- name: Check Host requirements
+  ansible.builtin.include_tasks: prechecks.yml
+
+- name: Load gtp5g kernel module
+  ansible.builtin.include_tasks: load-gtp5g-module.yml
+
+- name: Force all notified handlers to run at this point
+  ansible.builtin.meta: flush_handlers
+
+- name: Create Management KinD Cluster
+  ansible.builtin.include_tasks: create-mgmt.yml
+  when: kind.enabled
+
+- name: Create Gitea K8s resources
+  ansible.builtin.include_tasks: prep-gitea.yml
+  when: gitea.enabled
+
+- name: Apply kpt packages
+  ansible.builtin.include_tasks: apply-pkgs.yml

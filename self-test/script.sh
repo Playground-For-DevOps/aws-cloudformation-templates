@@ -3,7 +3,7 @@ aws cloudformation validate-template --template-body file:///home/ubuntu/aws/aws
 
 
 
-aws cloudformation create-stack --stack-name test --template-body file:///home/ubuntu/aws/aws-cloudformation-templates/self-test/EKS.yaml --on-failure DELETE 
+aws cloudformation create-stack --stack-name test --template-body <path> --on-failure DELETE 
 # create a CloudFormation stack that includes the creation of IAM related resources.
 # You have to explicitly tell CloudFormation that you are OK with that.
 

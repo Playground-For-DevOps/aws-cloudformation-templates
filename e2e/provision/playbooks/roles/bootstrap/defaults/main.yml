@@ -71,31 +71,31 @@ cert_manager:
         async: 660
         poll: 0
 
-# cluster_api:
-#   enabled: true
-#   k8s:
-#     namespaces:
-#       - capi-system
-#       - capi-kubeadm-control-plane-system
-#       - capi-kubeadm-bootstrap-system
-#       - capd-system
-#   kpt:
-#     packages:
-#       - repo_uri: https://github.com/nephio-project/nephio-example-packages
-#         pkg: cluster-capi
-#         version: "{{ nephio_pkg_version }}"
-#         async: 900
-#         poll: 5
-#       - repo_uri: https://github.com/nephio-project/nephio-example-packages
-#         pkg: cluster-capi-infrastructure-docker
-#         version: "{{ nephio_pkg_version }}"
-#         async: 780
-#         poll: 5
-#       - repo_uri: https://github.com/nephio-project/nephio-example-packages
-#         pkg: cluster-capi-kind-docker-templates
-#         version: "{{ nephio_pkg_version }}"
-#         async: 1500
-#         poll: 0
+cluster_api:
+  enabled: true
+  k8s:
+    namespaces:
+      - capi-system
+      - capi-kubeadm-control-plane-system
+      - capi-kubeadm-bootstrap-system
+      - capd-system
+  kpt:
+    packages:
+      - repo_uri: https://github.com/nephio-project/nephio-example-packages
+        pkg: cluster-capi
+        version: "{{ nephio_pkg_version }}"
+        async: 900
+        poll: 5
+      - repo_uri: https://github.com/nephio-project/nephio-example-packages
+        pkg: cluster-capi-infrastructure-docker
+        version: "{{ nephio_pkg_version }}"
+        async: 780
+        poll: 5
+      - repo_uri: https://github.com/nephio-project/nephio-example-packages
+        pkg: cluster-capi-kind-docker-templates
+        version: "{{ nephio_pkg_version }}"
+        async: 1500
+        poll: 0
 
 metallb:
   enabled: true

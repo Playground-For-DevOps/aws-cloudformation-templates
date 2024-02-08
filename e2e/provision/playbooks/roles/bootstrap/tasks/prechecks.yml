@@ -8,19 +8,19 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-# - name: Checking host has minimum number of CPUS
-#   ansible.builtin.assert:
-#     that: ansible_facts.processor_vcpus >= host_min_vcpu
-#     fail_msg: >-
-#       Host does not have the minimum number of vCPUs - {{ ansible_facts.processor_vcpus }}.
-#       Minimum required CPUs - {{ host_min_vcpu }}
+- name: Checking host has minimum number of CPUS
+  ansible.builtin.assert:
+    that: ansible_facts.processor_vcpus >= host_min_vcpu
+    fail_msg: >-
+      Host does not have the minimum number of vCPUs - {{ ansible_facts.processor_vcpus }}.
+      Minimum required CPUs - {{ host_min_vcpu }}
 
-# - name: Checking host has minimum RAM
-#   ansible.builtin.assert:
-#     that: (ansible_facts.memtotal_mb / 1024) >= host_min_cpu_ram
-#     fail_msg: >-
-#       Host does not have enough RAM - {{ ansible_facts.memtotal_mb / 1024 }} GB.
-#       Minimum required RAM - {{ host_min_cpu_ram }} GB
+- name: Checking host has minimum RAM
+  ansible.builtin.assert:
+    that: (ansible_facts.memtotal_mb / 1024) >= host_min_cpu_ram
+    fail_msg: >-
+      Host does not have enough RAM - {{ ansible_facts.memtotal_mb / 1024 }} GB.
+      Minimum required RAM - {{ host_min_cpu_ram }} GB
 
 - name: Checking host has minimal kernel version
   ansible.builtin.assert:

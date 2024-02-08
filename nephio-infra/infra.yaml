@@ -468,8 +468,10 @@ Outputs:
     Value: !Ref Mmgt
   # Master2Info:
   #   Value: !Ref Master2
-  Worker1Info:
-    Value: !Ref Worker1
+  RegionalInfo:
+    Value: !Ref Regional
+  EdgeInfo:
+    Value: !Ref Edge
   # Worker2Info:
   #   Value: !Ref Worker2
   StackVPC:
